@@ -16,7 +16,6 @@ export function RewardOverlay() {
   return (
     <View style={[{flex: 1}, styles.overlay]}>
       <TouchableOpacity
-        // activeOpacity={1}
         onPress={handleTouch}>
         <View style={styles.overlayContent}>
           <Image source={IMAGES.REWARD} style={styles.reward} resizeMode='contain' />
@@ -30,7 +29,6 @@ const styles = StyleSheet.create({
   overlay: {
     position: 'absolute',
     top: 0,
-    flex: 1,
     left: 0,
     right: 0,
     bottom: 0,

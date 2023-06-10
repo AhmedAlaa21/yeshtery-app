@@ -1,14 +1,6 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  useWindowDimensions,
-  ImageBackground,
-} from 'react-native';
+import {View, Text, StyleSheet, Image, useWindowDimensions} from 'react-native';
 import React from 'react';
 import {IMAGES} from '../../assets';
-import {useNavigation} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 type IProps = {
@@ -17,32 +9,33 @@ type IProps = {
 };
 
 export function Navbar(props: IProps) {
-  const windowWidth = useWindowDimensions().width;
-  const nav = useNavigation();
   return (
     <View>
-      <ImageBackground source={IMAGES.BACKGROUND} resizeMode="cover">
-        <View style={styles.container}>
-          <TouchableOpacity onPress={props.handlePress} style={styles.leftSide}>
-            <Image source={IMAGES.ARROW_BACK} style={styles.arrowBack} />
-            <Text style={styles.navTitle}> {props.title}</Text>
-          </TouchableOpacity>
-          <View>
-            <Image source={IMAGES.CART} style={styles.cart} />
-          </View>
+      <Image style={styles.background} source={IMAGES.BACKGROUND} />
+      <View style={styles.container}>
+        <TouchableOpacity onPress={props.handlePress} style={styles.leftSide}>
+          <Image source={IMAGES.ARROW_BACK} style={styles.arrowBack} />
+          <Text style={styles.navTitle}> {props.title}</Text>
+        </TouchableOpacity>
+        <View style={styles.cart}>
+          <Image source={IMAGES.CART} />
         </View>
-      </ImageBackground>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    height: 80,
-    paddingHorizontal: 15,
+    height: 65,
+    width: '100%',
+    borderRadius: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 15,
+    backgroundColor: '#31007E',
+    overflow: 'hidden',
   },
   arrowBack: {
     width: 15,
@@ -50,9 +43,9 @@ const styles = StyleSheet.create({
     marginEnd: 8,
   },
   cart: {
+    zIndex: 300,
     width: 15,
     height: 20,
-    marginRight: 30,
   },
   navTitle: {
     fontSize: 18,
@@ -66,5 +59,12 @@ const styles = StyleSheet.create({
   rightSide: {
     fontSize: 18,
     color: '#fff',
+  },
+  background: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    resizeMode: 'contain',
+    zIndex: 10,
   },
 });

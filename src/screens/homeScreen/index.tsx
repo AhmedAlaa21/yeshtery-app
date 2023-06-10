@@ -1,21 +1,13 @@
-import {
-  View,
-  Text,
-  ActivityIndicator,
-  FlatList,
-  StyleSheet,
-  ImageBackground,
-} from 'react-native';
+import {View, ActivityIndicator, FlatList, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Product} from '../../interfaces/product';
 import {Navbar, ProductCard} from '../../components';
-import {IMAGES} from '../../assets';
 
 export function HomeScreen({navigation}: {navigation: any}) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-
+  // console.log(API_URL)
   useEffect(() => {
     setLoading(true);
     axios
@@ -39,34 +31,38 @@ export function HomeScreen({navigation}: {navigation: any}) {
   );
 
   return (
-    <View style={{flex: 1}}>
-      <ImageBackground source={IMAGES.BACKGROUND} resizeMode="cover">
-        <View style={styles.container}>
-          <Navbar title="Scan Products" />
-          {loading ? (
-            <ActivityIndicator size={'large'} color="blue" />
-          ) : (
-            <View style={styles.productList}>
-              <FlatList
-                data={products}
-                renderItem={renderItem}
-                keyExtractor={item => item.id.toString()}
-              />
-            </View>
-          )}
-        </View>
-      </ImageBackground>
+    <View style={styles.container}>
+      <Navbar title="Scan Products" />
+      <View>
+        {loading ? (
+          <ActivityIndicator size={'large'} color="blue" />
+        ) : (
+          <View style={styles.productList}>
+            <FlatList
+              ListEmptyComponent={
+                <ActivityIndicator size={'large'} color="blue" />
+              }
+              data={products}
+              renderItem={renderItem}
+              keyExtractor={item => item.id.toString()}
+              showsVerticalScrollIndicator={false}
+            />
+          </View>
+        )}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    backgroundColor: '#31007E',
+  },
   productList: {
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
     backgroundColor: '#fff',
-    paddingHorizontal: 10,
-    paddingTop: 20,
+    paddingHorizontal: 15,
+    paddingTop: 10,
   },
 });

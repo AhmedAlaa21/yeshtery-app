@@ -1,9 +1,14 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  Dimensions,
+} from 'react-native';
 import {
   ColorContainer,
-  CustomSlider,
   GetItemMethod,
   Navbar,
   RewardOverlay,
@@ -12,6 +17,7 @@ import {
 } from '../../components';
 import {IMAGES} from '../../assets';
 import {MOCK_DATA} from '../../utils/mockdata';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export const DetailsScreen = ({
   route,
@@ -43,52 +49,67 @@ export const DetailsScreen = ({
 
   return (
     <View style={styles.parent}>
-      <Navbar title={product.name} />
+      <Navbar
+        title={product.name}
+        handlePress={() => {
+          navigation.goBack();
+        }}
+      />
       {loading || product === undefined ? (
         <ActivityIndicator size="large" />
       ) : (
-        <View style={styles.container}>
-          {console.log(JSON.stringify(product.images, null, 2))}
-          <View style={styles.nameAndPrice}>
-            <Text style={styles.name} numberOfLines={2}>
-              {product.name}
-            </Text>
-            <View style={styles.pricing}>
-              <Text style={styles.price}>{`( ${product.price} ) EGP`}</Text>
-              <Text style={styles.deletedPrice}>{`${product.price} EGP`}</Text>
+        <View style={{flex: 1}}>
+          <ScrollView
+            style={styles.container}
+            showsVerticalScrollIndicator={false}>
+            {product.images !== undefined ? (
+              <SliderComponent images={product.images} />
+            ) : (
+              <Text>There is no Images to show!</Text>
+            )}
+            <View style={styles.nameAndPrice}>
+              <Text style={styles.name} numberOfLines={2}>
+                {product.name}
+              </Text>
+              <View style={styles.pricing}>
+                <Text style={styles.price}>{`( ${product.price} ) EGP`}</Text>
+                <Text
+                  style={styles.deletedPrice}>{`${product.price} EGP`}</Text>
+              </View>
             </View>
-          </View>
-          <Text style={styles.description}>{product.description}</Text>
-          <View style={styles.colorWrapper}>
-            <Text style={styles.sideTitle}>color</Text>
-            <View style={styles.colors}>
-              <ColorContainer colors={availableColors} />
+            <Text style={styles.description}>{product.description}</Text>
+            <View style={styles.colorWrapper}>
+              <Text style={styles.sideTitle}>color</Text>
+              <View style={styles.colors}>
+                <ColorContainer colors={availableColors} />
+              </View>
             </View>
-          </View>
-          <View style={styles.sizeWrapper}>
-            <Text style={styles.sideTitle}>size</Text>
-            <View style={styles.size}>
-              <SizeContainer sizes={availableSizes} />
+            <View style={styles.sizeWrapper}>
+              <Text style={styles.sideTitle}>size</Text>
+              <View style={styles.size}>
+                <SizeContainer sizes={availableSizes} />
+              </View>
             </View>
-          </View>
-          <GetItemMethod
-            imgPath={IMAGES.QR}
-            methodName="Scan"
-            reward="& get 100 points"
-            handlePress={() => {
-              navigation.navigate('QrScreen', {itemId: itemId});
-            }}
-            btnTitle={scanned ? 'Done' : 'Scan'}
-            scanned={scanned}
-          />
-          <GetItemMethod
-            imgPath={IMAGES.BILL}
-            methodName="Buy & Submit"
-            reward="the receipt for 120 points"
-            handlePress={() => {}}
-            btnTitle="Add to Cart"
-          />
-          {scanned && <RewardOverlay />}
+            <GetItemMethod
+              imgPath={IMAGES.QR}
+              methodName="Scan"
+              reward="& get 100 points"
+              handlePress={() => {
+                navigation.navigate('QrScreen', {itemId: itemId});
+              }}
+              btnTitle={scanned ? 'Done' : 'Scan'}
+              scanned={scanned}
+            />
+            <GetItemMethod
+              imgPath={IMAGES.BILL}
+              methodName="Buy & Submit"
+              reward="the receipt for 120 points"
+              handlePress={() => {}}
+              btnTitle="Add to Cart"
+            />
+            {scanned && <RewardOverlay />}
+            <View style={{paddingVertical: 20}} />
+          </ScrollView>
         </View>
       )}
     </View>
@@ -103,6 +124,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderTopEndRadius: 30,
     borderTopStartRadius: 30,
+    backgroundColor: '#fff',
   },
   nameAndPrice: {
     display: 'flex',

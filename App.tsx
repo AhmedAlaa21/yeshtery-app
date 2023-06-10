@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {StyleSheet, Text, useColorScheme, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {RootStack} from './src/navigation';
 
 export type RootStackParamList = {

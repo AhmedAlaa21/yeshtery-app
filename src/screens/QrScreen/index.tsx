@@ -14,7 +14,7 @@ export function QrScreen({route, navigation}: {route: any; navigation: any}) {
 
   return (
     <View>
-      <Navbar title="scan code" />
+      <Navbar title="scan code" handlePress={()=> navigation.goBack()} />
       <View style={styles.container}>
         <TouchableOpacity onPress={handleQr}>
           <Image source={IMAGES.QRScan} style={styles.qrImg} />
