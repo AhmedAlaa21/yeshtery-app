@@ -1,22 +1,25 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import React from "react";
-import { Pricing } from "./shared";
-import { IMAGES } from "../assets";
-import { Product } from "../interfaces/product";
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {Pricing} from './shared';
+import {IMAGES} from '../assets';
+import {Product} from '../interfaces/product';
+import { useNavigation } from '@react-navigation/native';
 
 type IProps = {
   product: Product;
   handlePress: () => void;
+  navigation?: any;
 };
 
-const IMG_URL = "https://develop.yeshtery.com/files/";
+const IMG_URL = 'https://develop.yeshtery.com/files/';
 
 export function ProductCard(props: IProps) {
+  const nav: any = useNavigation();
   return (
     <TouchableOpacity onPress={props.handlePress} style={styles.card}>
       <View style={styles.productImgWrapper}>
         <Image
-          source={{ uri: `${IMG_URL}${props.product.image_url}` }}
+          source={{uri: `${IMG_URL}${props.product.image_url}`}}
           style={styles.productImg}
           resizeMode="contain"
         />
@@ -25,7 +28,11 @@ export function ProductCard(props: IProps) {
       <View style={styles.productInfo}>
         <Text style={styles.productName}>{props.product.name}</Text>
         <View style={styles.pricingWrapper}>
-          <Pricing imgPath={IMAGES.QR} price={props.product.price} />
+          <Pricing
+            imgPath={IMAGES.QR}
+            price={props.product.price}
+            handlePress={() =>nav.navigate("QrScreen")}
+          />
           <Pricing imgPath={IMAGES.BILL} price={props.product.price} />
         </View>
       </View>
@@ -37,13 +44,13 @@ const styles = StyleSheet.create({
   card: {
     height: 140,
     marginHorizontal: 10,
-    alignSelf: "center",
-    backgroundColor: "#fff",
-    flexDirection: "row",
-    justifyContent: "space-between",
+    alignSelf: 'center',
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingHorizontal: 10,
     borderRadius: 4,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
@@ -53,11 +60,11 @@ const styles = StyleSheet.create({
     elevation: 3,
     margin: 3,
     marginVertical: 15,
-    columnGap: 20
+    columnGap: 20,
   },
   productImgWrapper: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   productImg: {
     width: 120,
@@ -65,17 +72,17 @@ const styles = StyleSheet.create({
   },
   productInfo: {
     flex: 2,
-    justifyContent: "center",
+    justifyContent: 'center',
     padding: 20,
-    backgroundColor: ''
+    backgroundColor: '',
   },
   productName: {
-    fontWeight: "500",
+    fontWeight: '500',
     flex: 1,
   },
   pricingWrapper: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     flex: 1,
     paddingRight: 20,
   },

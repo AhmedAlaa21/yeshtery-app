@@ -16,6 +16,7 @@ const {width: screenWidth} = Dimensions.get('window');
 export const SliderComponent: React.FC<Props> = ({images}) => {
   const [activeSlide, setActiveSlide] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
+  let imageSlice = images.slice(0, 4);
 
   const renderItem = ({item}: {item: ImageType}) => {
     return (
@@ -31,7 +32,7 @@ export const SliderComponent: React.FC<Props> = ({images}) => {
   const pagination = () => {
     return (
       <Pagination
-        dotsLength={4}
+        dotsLength={imageSlice.length}
         activeDotIndex={activeSlide}
         containerStyle={styles.paginationContainer}
         dotStyle={styles.dotStyle}
@@ -46,10 +47,10 @@ export const SliderComponent: React.FC<Props> = ({images}) => {
     <View style={styles.container}>
       <Carousel
         style={styles.carousel}
-        data={images}
+        data={imageSlice}
         renderItem={renderItem}
         sliderWidth={screenWidth}
-        itemWidth={screenWidth}
+        itemWidth={screenWidth - 20}
         onSnapToItem={index => setActiveSlide(index)}
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {x: scrollX}}}],
@@ -63,32 +64,30 @@ export const SliderComponent: React.FC<Props> = ({images}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 12,
   },
   carousel: {
     borderColor: '#ccc',
     borderWidth: 1,
-    paddingHorizontal: 10,
   },
   itemContainer: {
     width: screenWidth,
-    height: screenWidth,
+    height: screenWidth - 100,
     alignItems: 'center',
     justifyContent: 'center',
   },
   image: {
-    width: '100%',
-    height: '100%',
+    height: 247,
+    width: 341,
     resizeMode: 'cover',
   },
   paginationContainer: {
     position: 'absolute',
-    bottom: 0,
-    paddingTop: 8,
-    paddingBottom: 16,
-    alignSelf: 'center',
+    bottom: -10,
   },
   dotStyle: {
     width: 20,

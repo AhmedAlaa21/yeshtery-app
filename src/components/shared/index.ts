@@ -3,3 +3,4 @@ export * from './pricing';
 export * from './colorContainer';
 export * from './sizeContainer';
 export * from './getItemMethod';
+export * from './loadingIndicator';

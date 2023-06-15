@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import React from 'react';
+import { theme } from '../../utils';
 
 type IProps = {
   methodName: string;
@@ -30,9 +31,9 @@ export function GetItemMethod(props: IProps) {
       <View style={styles.btn}>
         <TouchableOpacity onPress={props.handlePress}>
           <LinearGradient
-            start={{x: 1, y: 0}}
-            end={{x: 0, y: 0}}
-            colors={['#0DD2DB', '#4F63DB', '#5C4CDB']}
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 0}}
+            colors={['#5C4CDB', '#4F63DB', '#0DD2DB']}
             style={styles.buttonBackground}>
             <Text style={styles.buttonText}>{props.btnTitle}</Text>
           </LinearGradient>
@@ -41,6 +42,8 @@ export function GetItemMethod(props: IProps) {
     </View>
   );
 }
+
+const {colors, sizes} = theme;
 
 const styles = StyleSheet.create({
   row: {
@@ -74,6 +77,9 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  done: {
+    backgroundColor: '#000',
   },
   buttonText: {
     color: '#FFFFFF',

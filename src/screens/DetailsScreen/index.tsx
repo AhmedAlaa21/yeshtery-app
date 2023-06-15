@@ -1,15 +1,10 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  Dimensions,
-} from 'react-native';
+import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
 import {
   ColorContainer,
   GetItemMethod,
+  LoadingIndicator,
   Navbar,
   RewardOverlay,
   SizeContainer,
@@ -18,6 +13,7 @@ import {
 import {IMAGES} from '../../assets';
 import {MOCK_DATA} from '../../utils/mockdata';
 import {ScrollView} from 'react-native-gesture-handler';
+import {theme} from '../../utils';
 
 export const DetailsScreen = ({
   route,
@@ -44,8 +40,45 @@ export const DetailsScreen = ({
       })
       .finally(() => {
         setLoading(false);
-      });
+      })
+      .catch(error => console.log(error));
   }, []);
+
+  const renderNameAndPrice = () => {
+    return (
+      <View style={styles.nameAndPrice}>
+        <Text style={styles.name} numberOfLines={2}>
+          {product.name}
+        </Text>
+        <View style={styles.pricing}>
+          <Text style={styles.price}>{`( ${product.price} ) EGP`}</Text>
+          <Text style={styles.deletedPrice}>{`${product.price} EGP`}</Text>
+        </View>
+      </View>
+    );
+  };
+
+  const renderColors = () => {
+    return (
+      <View style={styles.colorWrapper}>
+        <Text style={styles.sideTitle}>color</Text>
+        <View style={styles.colors}>
+          <ColorContainer colors={availableColors} />
+        </View>
+      </View>
+    );
+  };
+
+  const renderSize = () => {
+    return (
+      <View style={styles.sizeWrapper}>
+        <Text style={styles.sideTitle}>size</Text>
+        <View style={styles.size}>
+          <SizeContainer sizes={availableSizes} />
+        </View>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.parent}>
@@ -56,45 +89,25 @@ export const DetailsScreen = ({
         }}
       />
       {loading || product === undefined ? (
-        <ActivityIndicator size="large" />
+        <LoadingIndicator />
       ) : (
-        <View style={{flex: 1}}>
-          <ScrollView
-            style={styles.container}
-            showsVerticalScrollIndicator={false}>
+        <View style={styles.container}>
+          <ScrollView showsVerticalScrollIndicator={false}>
             {product.images !== undefined ? (
               <SliderComponent images={product.images} />
             ) : (
               <Text>There is no Images to show!</Text>
             )}
-            <View style={styles.nameAndPrice}>
-              <Text style={styles.name} numberOfLines={2}>
-                {product.name}
-              </Text>
-              <View style={styles.pricing}>
-                <Text style={styles.price}>{`( ${product.price} ) EGP`}</Text>
-                <Text
-                  style={styles.deletedPrice}>{`${product.price} EGP`}</Text>
-              </View>
-            </View>
+            {renderNameAndPrice()}
             <Text style={styles.description}>{product.description}</Text>
-            <View style={styles.colorWrapper}>
-              <Text style={styles.sideTitle}>color</Text>
-              <View style={styles.colors}>
-                <ColorContainer colors={availableColors} />
-              </View>
-            </View>
-            <View style={styles.sizeWrapper}>
-              <Text style={styles.sideTitle}>size</Text>
-              <View style={styles.size}>
-                <SizeContainer sizes={availableSizes} />
-              </View>
-            </View>
+            {renderColors()}
+            {renderSize()}
             <GetItemMethod
               imgPath={IMAGES.QR}
               methodName="Scan"
               reward="& get 100 points"
               handlePress={() => {
+                if (scanned) return;
                 navigation.navigate('QrScreen', {itemId: itemId});
               }}
               btnTitle={scanned ? 'Done' : 'Scan'}
@@ -107,24 +120,27 @@ export const DetailsScreen = ({
               handlePress={() => {}}
               btnTitle="Add to Cart"
             />
-            {scanned && <RewardOverlay />}
-            <View style={{paddingVertical: 20}} />
+            <View style={{paddingVertical: 50}} />
           </ScrollView>
         </View>
       )}
+      {scanned && <RewardOverlay />}
     </View>
   );
 };
 
+const {colors, sizes} = theme;
+
 const styles = StyleSheet.create({
   parent: {
-    flex: 1,
+    backgroundColor: colors.navbarBackground,
   },
   container: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
     borderTopEndRadius: 30,
     borderTopStartRadius: 30,
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
   },
   nameAndPrice: {
     display: 'flex',
@@ -132,34 +148,35 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginVertical: 16,
+    paddingHorizontal: 3,
   },
   name: {
-    color: '#000',
-    fontSize: 20,
+    color: colors.black,
+    fontSize: sizes.large,
     fontWeight: 'bold',
     flex: 1,
     maxWidth: '50%',
     overflow: 'hidden',
   },
   pricing: {
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'center',
     flex: 1,
-    maxWidth: '50%',
   },
   price: {
-    fontSize: 16,
+    fontSize: sizes.small,
     color: 'blue',
   },
   deletedPrice: {
-    fontSize: 16,
-    color: '#777',
+    fontSize: sizes.small,
+    color: colors.gray,
     textDecorationLine: 'line-through',
   },
   description: {
-    fontSize: 16,
+    fontSize: sizes.small,
     textAlign: 'left',
     lineHeight: 22,
+    color: 'rgba(9, 10, 10, 0.6)',
   },
   colorWrapper: {
     marginVertical: 16,
